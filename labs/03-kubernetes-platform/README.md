@@ -103,9 +103,10 @@ EXPECT_FAULT=1 python3 -m pytest tests -q -k test_fault_is_detected
 terraform -chdir=terraform apply    # repair with the real tag
 ```
 
-The fault test asserts *both* that the Deployment does not become available
-within 40 s *and* that the container state carries an image error reason. A
-deployment that is simply still starting would fail the test.
+The fault test asserts *both* that the rollout does not complete within 40 s
+*and* that the container state carries an image error reason. Under a rolling
+update the old, ready pods keep `condition=available` true, so that condition is
+deliberately not used as the signal -- it would hide the fault.
 
 ## 6. Tests
 
@@ -117,7 +118,7 @@ deployment that is simply still starting would fail the test.
 | `test_resources_and_probes_are_configured` | requests/limits and probe paths in the live object |
 | `test_pod_security_context_is_restrictive` | runAsNonRoot, seccomp, no caps, read-only fs |
 | `test_http_endpoints_respond` | real HTTP through port-forward (`/healthz`, `/api/info`) |
-| `test_fault_is_detected` | fault scenario is recognised as failure |
+| `test_fault_is_detected` | rollout stalls and new pods report an image error |
 
 App unit tests (`app/tests/test_app.py`, no cluster needed): 5 tests.
 

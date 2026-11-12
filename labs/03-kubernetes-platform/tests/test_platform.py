@@ -172,18 +172,20 @@ def test_http_endpoints_respond() -> None:
 
 @pytest.mark.skipif(not EXPECT_FAULT, reason="only runs in the deliberate fault scenario")
 def test_fault_is_detected() -> None:
-    # The deployment must NOT become available: the image tag does not exist and
-    # the pull policy is Never, so the pods fail immediately.
+    # Rolling updates keep the old, ready pods around while the new ReplicaSet is
+    # broken -- so `condition=available` would still be true. The correct signal
+    # is that the rollout does not make progress: the pull policy is Never and
+    # the image tag does not exist, so no new pod can become ready.
     proc = kubectl(
-        "wait",
-        "--for=condition=available",
+        "rollout",
+        "status",
         f"deployment/{DEPLOYMENT}",
         f"-n{NAMESPACE}",
         "--timeout=40s",
         check=False,
         timeout=60,
     )
-    assert proc.returncode != 0, "fault scenario unexpectedly became available"
+    assert proc.returncode != 0, "fault scenario unexpectedly completed its rollout"
 
     pods = kubectl("get", "pods", "-n", NAMESPACE, "-o", "json").stdout
     payload = json.loads(pods)

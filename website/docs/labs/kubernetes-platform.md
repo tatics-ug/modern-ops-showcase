@@ -35,9 +35,10 @@ never delete a cluster.
 ## Deliberate failure
 
 A missing image tag with `imagePullPolicy: Never` produces `ErrImageNeverPull`.
-The test asserts that the Deployment does **not** become available and that the
-container reports an image error, then the desired state is re-applied and all
-tests pass again.
+The test asserts that the rollout does **not** complete and that the new
+containers report an image error (a rolling update keeps the old pods available,
+so `condition=available` would hide the fault). Then the desired state is
+re-applied and all tests pass again.
 
 ## Run it
 
