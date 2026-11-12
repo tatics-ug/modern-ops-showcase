@@ -1,0 +1,172 @@
+{
+  "changes": [
+    "evidence/agent-runs/issue-1.md"
+  ],
+  "events": [
+    {
+      "action": "accepted",
+      "actor": "triage",
+      "detail": "issue is bounded and safe to process",
+      "order": 0,
+      "timestamp": "2026-11-12T16:06:29Z"
+    },
+    {
+      "action": "planned",
+      "actor": "planner",
+      "detail": "6 steps, target evidence/agent-runs/issue-1.md",
+      "order": 1,
+      "timestamp": "2026-11-12T16:06:29Z"
+    },
+    {
+      "action": "wrote",
+      "actor": "implementer",
+      "detail": "evidence/agent-runs/issue-1.md",
+      "order": 2,
+      "timestamp": "2026-11-12T16:06:29Z"
+    },
+    {
+      "action": "tests-passed",
+      "actor": "tester",
+      "detail": "23 passed in 0.22s",
+      "order": 3,
+      "timestamp": "2026-11-12T16:06:30Z"
+    },
+    {
+      "action": "approved",
+      "actor": "reviewer",
+      "detail": "7 checks",
+      "order": 4,
+      "timestamp": "2026-11-12T16:06:30Z"
+    },
+    {
+      "action": "recording-assembled",
+      "actor": "orchestrator",
+      "detail": "agent-issue-1-43255005540.json",
+      "order": 5,
+      "timestamp": "2026-11-12T16:06:30Z"
+    }
+  ],
+  "execution_mode": "live-ci",
+  "generated_at": "2026-11-12T16:06:35Z",
+  "issue": {
+    "number": 1,
+    "title": "Document the demo application health endpoints",
+    "url": "https://github.com/tatics-ug/modern-ops-showcase/issues/1"
+  },
+  "kind": "scripted-pipeline",
+  "known_limitations": [
+    "Scripted pipeline: no language model, no reasoning beyond deterministic rules.",
+    "Review is rule-based and cannot judge design quality.",
+    "Pull requests created with the workflow GITHUB_TOKEN do not trigger further workflows.",
+    "The pipeline writes only to evidence/agent-runs/ and replay/recordings/; it cannot change code."
+  ],
+  "llm": false,
+  "plan": {
+    "goal": "Document the agent task from issue #1 in a bounded artefact",
+    "issue_number": 1,
+    "kind": "scripted-pipeline",
+    "limits": {
+      "max_files": 1,
+      "max_lines": 40,
+      "timeout_minutes": 10
+    },
+    "llm": false,
+    "role": "planner",
+    "steps": [
+      "read the accepted issue",
+      "write evidence/agent-runs/issue-1.md (single file, no code changes)",
+      "run the repository test suite",
+      "run the independent rule-based review",
+      "assemble the run record and the replay recording",
+      "open a pull request for human review"
+    ],
+    "stop_conditions": [
+      "triage rejected the issue",
+      "tests fail after one corrective attempt",
+      "review does not approve",
+      "issue text requests a path outside the whitelist"
+    ],
+    "target_path": "evidence/agent-runs/issue-1.md",
+    "test_command": "python3 -m pytest tests -q",
+    "timestamp": "2026-11-12T16:06:29Z"
+  },
+  "pull_request": {
+    "number": "2",
+    "url": "https://github.com/tatics-ug/modern-ops-showcase/pull/2"
+  },
+  "recording_id": "agent-issue-1-43255005540",
+  "review": {
+    "approved": true,
+    "checks": [
+      {
+        "detail": "1 changed file(s); outside whitelist: none",
+        "name": "scope-whitelist",
+        "status": "passed"
+      },
+      {
+        "detail": "declared: ['evidence/agent-runs/issue-1.md']; changed: ['evidence/agent-runs/issue-1.md']",
+        "name": "declared-changes-match",
+        "status": "passed"
+      },
+      {
+        "detail": "1 <= 1",
+        "name": "file-count-within-limits",
+        "status": "passed"
+      },
+      {
+        "detail": "0 hit(s)",
+        "name": "no-secrets-in-diff",
+        "status": "passed"
+      },
+      {
+        "detail": "23 passed in 0.22s",
+        "name": "tests-passed",
+        "status": "passed"
+      },
+      {
+        "detail": "artefact mentions the scripted pipeline",
+        "name": "artefact-has-honest-label",
+        "status": "passed"
+      },
+      {
+        "detail": "issue is bounded and safe to process",
+        "name": "issue-was-accepted",
+        "status": "passed"
+      }
+    ],
+    "kind": "scripted-pipeline",
+    "limitations": [
+      "Rule-based review only: no semantic judgement, no security expertise beyond the rules above."
+    ],
+    "llm": false,
+    "reviewer": "rule-based-independent-review",
+    "role": "reviewer",
+    "timestamp": "2026-11-12T16:06:30Z"
+  },
+  "roles": [
+    "triage",
+    "planner",
+    "implementer",
+    "tester",
+    "reviewer"
+  ],
+  "scenario_id": "agent-task-001",
+  "scenario_name": "Agent task #1",
+  "schema_version": "1",
+  "status": "passed",
+  "tests": {
+    "command": "python3 -m pytest tests -q",
+    "exit_code": 0,
+    "kind": "scripted-pipeline",
+    "llm": false,
+    "output_tail": [
+      ".......................                                                  [100%]",
+      "23 passed in 0.22s"
+    ],
+    "role": "tester",
+    "started_at": "2026-11-12T16:06:29Z",
+    "status": "passed",
+    "summary": "23 passed in 0.22s",
+    "timestamp": "2026-11-12T16:06:30Z"
+  }
+}
