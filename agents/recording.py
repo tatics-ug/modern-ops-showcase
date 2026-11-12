@@ -57,8 +57,12 @@ def main() -> int:
     triage = load_json(args.run / "triage.json")
     plan = load_json(args.run / "plan.json")
     implement = load_json(args.run / "implement.json")
-    tests = load_json(args.run / "tests.json")
-    review = load_json(args.run / "review.json")
+    tests = optional(args.run / "tests.json") or {"status": "failed", "summary": "test role did not complete"}
+    review = optional(args.run / "review.json") or {
+        "approved": False,
+        "checks": [],
+        "reviewer": "not-run",
+    }
     events = read_events(args.run)
 
     number = triage["issue_number"]
