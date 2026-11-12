@@ -1,0 +1,87 @@
+site_name: ModernOps Showcase
+site_url: https://modern-ops-showcase.tatics.de/
+site_description: >-
+  A reproducible, hands-on showcase for modern infrastructure and agentic
+  engineering: Terraform, Kubernetes, CI/CD, security, evidence and a scripted
+  issue-to-PR pipeline.
+site_author: ModernOps Showcase contributors
+repo_url: https://github.com/tatics-ug/modern-ops-showcase
+repo_name: tatics-ug/modern-ops-showcase
+copyright: MIT licensed -- ModernOps Showcase contributors
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - content.tabs.link
+    - search.suggest
+    - search.highlight
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/tatics-ug/modern-ops-showcase
+      name: Source code on GitHub
+
+nav:
+  - Home: index.md
+  - Labs:
+      - Overview: labs/index.md
+      - Lab 01 -- Terraform lifecycle: labs/terraform-lifecycle.md
+      - Lab 03 -- Kubernetes platform: labs/kubernetes-platform.md
+  - Architecture: architecture.md
+  - Agentic Engineering: agentic.md
+  - Technology Stack: technology.md
+  - Evidence: evidence.md
+  - Getting Started: getting-started.md
+  - About: about.md

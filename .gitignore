@@ -1,0 +1,56 @@
+# Ignored Terraform artefacts. `.terraform.lock.hcl` is intentionally NOT
+# ignored: provider versions and hashes must be reproducible.
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Lab 01 generated artefacts (recreated on every apply)
+labs/01-terraform-lifecycle/workspace/
+labs/01-terraform-lifecycle/evidence/
+labs/01-terraform-lifecycle/.pytest_cache/
+labs/01-terraform-lifecycle/tests/__pycache__/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local environment files
+.env
+.env.local
+*.local.tfvars
+
+# Local variable files (may hold environment values)
+**/terraform.tfvars
+**/*.auto.tfvars
+
+# Python virtual environments (development only)
+.venv/
+website/.venv/
+
+# Website build output
+website/site/
+
+# Lab 03 local artefacts
+labs/03-kubernetes-platform/kind/kubeconfig
+labs/03-kubernetes-platform/evidence/
+labs/03-kubernetes-platform/.pytest_cache/
+labs/03-kubernetes-platform/tests/__pycache__/
+labs/03-kubernetes-platform/app/tests/__pycache__/
+
+# Tool output
+trivy-report.json
+.DS_Store
+
+# Local-only specification and IDE files (not part of the public project)
+modern-ops-showcase-implementation-master-prompt.md
+*.code-workspace

@@ -1,0 +1,67 @@
+{
+  "schema_version": "1",
+  "scenario_id": "terraform-lifecycle-001",
+  "scenario_name": "Terraform Infrastructure Lifecycle",
+  "execution_mode": "local",
+  "status": "passed",
+  "started_at": "2026-11-12T15:37:02Z",
+  "completed_at": "2026-11-12T15:37:18Z",
+  "commit": "53c37fe883554ef7fff1ae68b8ee15e9191f29d7",
+  "workflow_run": null,
+  "checks": [
+    {
+      "name": "terraform-available",
+      "status": "passed"
+    },
+    {
+      "name": "terraform-fmt",
+      "status": "passed"
+    },
+    {
+      "name": "terraform-init",
+      "status": "passed"
+    },
+    {
+      "name": "terraform-validate",
+      "status": "passed"
+    },
+    {
+      "name": "terraform-plan",
+      "status": "passed"
+    },
+    {
+      "name": "terraform-apply",
+      "status": "passed"
+    },
+    {
+      "name": "pytest",
+      "status": "passed"
+    },
+    {
+      "name": "second-plan-no-changes",
+      "status": "passed"
+    },
+    {
+      "name": "terraform-destroy",
+      "status": "passed"
+    },
+    {
+      "name": "workspace-removed",
+      "status": "passed"
+    },
+    {
+      "name": "state-empty",
+      "status": "passed"
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "evidence/local-lifecycle.json",
+      "kind": "json"
+    }
+  ],
+  "limitations": [
+    "Local run only; no GitHub Actions execution is recorded here.",
+    "Uses the hashicorp/local provider; no cloud or cluster resources are created."
+  ]
+}

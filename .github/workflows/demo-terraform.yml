@@ -1,0 +1,70 @@
+name: demo-terraform-lifecycle
+
+# Lab 01 -- Terraform Infrastructure Lifecycle.
+# Runs the same script as a local developer: init, fmt, validate, plan, apply,
+# pytest, idempotency check, destroy, evidence JSON. No cloud credentials, no
+# cloud cost: the lab only uses the hashicorp/local provider.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "labs/01-terraform-lifecycle/**"
+      - ".github/workflows/demo-terraform.yml"
+  pull_request:
+    paths:
+      - "labs/01-terraform-lifecycle/**"
+      - ".github/workflows/demo-terraform.yml"
+
+# Least privilege: the job only reads the repository.
+permissions:
+  contents: read
+
+concurrency:
+  group: demo-terraform-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lifecycle:
+    name: terraform lifecycle
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: labs/01-terraform-lifecycle
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # The version is pinned to match the version documented in the lab README.
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.17.2"
+          terraform_wrapper: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: python3 -m pip install --disable-pip-version-check pytest==8.3.4
+
+      - name: Run full lifecycle
+        run: bash tests/run_lifecycle.sh
+
+      # Cleanup even if an earlier step failed; the script also destroys on
+      # failure, this is the belt-and-braces variant.
+      - name: Ensure destroy
+        if: always()
+        run: terraform destroy -input=false -auto-approve -no-color || true
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab01-evidence
+          path: labs/01-terraform-lifecycle/evidence/
+          retention-days: 14
+          if-no-files-found: warn

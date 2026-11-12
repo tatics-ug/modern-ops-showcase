@@ -1,0 +1,26 @@
+{
+  "scenario_id": "agent-task-001",
+  "title": "Bounded agent task from a GitHub issue",
+  "description": "One issue is triaged, planned, implemented as a single whitelisted Markdown artefact, tested, reviewed and turned into a pull request. The implementation is a scripted reference pipeline; no language model is involved.",
+  "execution_mode": "live-ci",
+  "kind": "scripted-pipeline",
+  "llm": false,
+  "entrypoint": "scripts/run_agent_pipeline.sh",
+  "workflow": ".github/workflows/agentic-issue.yml",
+  "roles": ["triage", "planner", "implementer", "tester", "reviewer"],
+  "inputs": {
+    "issue_label": "agent:task",
+    "issue_template": ".github/ISSUE_TEMPLATE/agent-task.yml"
+  },
+  "writes": ["evidence/agent-runs/", "replay/recordings/"],
+  "stop_conditions": [
+    "triage rejects the issue",
+    "tests fail",
+    "review does not approve"
+  ],
+  "human_gate": "branch protection on main requires a pull request and one approving review; the pipeline never merges",
+  "known_limitations": [
+    "Rule-based, no LLM",
+    "PRs created with GITHUB_TOKEN do not trigger further workflows"
+  ]
+}

@@ -1,0 +1,48 @@
+name: Agent task (scripted pipeline)
+description: Bounded task for the scripted agent pipeline. Label agent:task is applied automatically.
+title: "agent: <short, concrete task>"
+labels: ["agent:task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form feeds the **scripted reference pipeline** (no LLM). The pipeline
+        writes exactly one Markdown file under `evidence/agent-runs/` and opens a
+        pull request that needs human review.
+
+        Keep the task bounded: one artefact, no infrastructure changes.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should exist afterwards? One or two sentences.
+      placeholder: Document the retry behaviour of the demo application.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is explicitly in scope, and what is out of scope?
+      placeholder: |
+        In scope: evidence/agent-runs/issue-<number>.md
+        Out of scope: code changes, workflows, .github paths
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How can a reviewer verify that the task is done?
+      placeholder: |
+        - The file exists and mentions the scripted pipeline
+        - The repository test suite passes
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context (optional)
+      description: Links, background, constraints. Avoid credentials and secrets.
+    validations:
+      required: false

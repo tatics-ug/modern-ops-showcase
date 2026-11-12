@@ -1,0 +1,10 @@
+{
+  "number": 999,
+  "title": "Record the demo application health endpoints",
+  "url": "https://github.com/tatics-ug/modern-ops-showcase/issues/999",
+  "body": "### Goal\nDocument the health endpoints of the demo application in a bounded run artefact.\n\n### Scope\nIn scope: evidence/agent-runs/issue-999.md\nOut of scope: code changes, workflows, configuration, infrastructure.\n\n### Acceptance criteria\n- The artefact exists and is labelled as produced by the scripted pipeline\n- The repository test suite still passes\n",
+  "labels": [
+    { "name": "agent:task" },
+    { "name": "docs" }
+  ]
+}

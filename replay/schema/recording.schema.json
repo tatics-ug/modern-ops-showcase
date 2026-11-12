@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modern-ops-showcase.tatics.de/schema/replay-recording.json",
+  "title": "Replay recording",
+  "description": "Recording of one real pipeline run. Replay data is never invented: it is derived from the run's own artefacts.",
+  "type": "object",
+  "required": [
+    "recording_id",
+    "kind",
+    "llm",
+    "scenario_id",
+    "title",
+    "description",
+    "execution_mode",
+    "issue",
+    "roles",
+    "events",
+    "plan",
+    "changes",
+    "tests",
+    "review",
+    "known_limitations"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "recording_id": { "type": "string", "minLength": 6 },
+    "kind": { "type": "string", "enum": ["scripted-pipeline", "ai-agent"] },
+    "llm": { "type": "boolean" },
+    "scenario_id": { "type": "string" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "execution_mode": { "type": "string", "enum": ["live-ci", "local", "replay"] },
+    "issue": {
+      "type": "object",
+      "required": ["number", "title"],
+      "properties": {
+        "number": { "type": ["integer", "string"] },
+        "title": { "type": "string" },
+        "url": { "type": ["string", "null"] }
+      }
+    },
+    "roles": { "type": "array", "items": { "type": "string" } },
+    "started_at": { "type": ["string", "null"] },
+    "completed_at": { "type": ["string", "null"] },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["order", "timestamp", "actor", "action"],
+        "properties": {
+          "order": { "type": "integer", "minimum": 0 },
+          "timestamp": { "type": "string" },
+          "actor": { "type": "string" },
+          "action": { "type": "string" },
+          "detail": { "type": "string" }
+        }
+      }
+    },
+    "plan": { "type": "object" },
+    "changes": { "type": "array", "items": { "type": "string" } },
+    "tests": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "type": "string", "enum": ["passed", "failed", "skipped"] },
+        "summary": { "type": "string" }
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["approved"],
+      "properties": {
+        "approved": { "type": "boolean" },
+        "checks": { "type": "array" }
+      }
+    },
+    "pull_request": {
+      "type": ["object", "null"],
+      "properties": {
+        "number": { "type": ["integer", "string", "null"] },
+        "url": { "type": ["string", "null"] }
+      }
+    },
+    "known_limitations": { "type": "array", "items": { "type": "string" } }
+  }
+}

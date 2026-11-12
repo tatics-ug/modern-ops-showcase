@@ -1,0 +1,11 @@
+# Example variable file for Lab 01. Copy to terraform.tfvars to use it.
+# `terraform.tfvars` is git-ignored only if you add it; nothing here is secret.
+
+workspace_name     = "lab01-demo"
+environment        = "demo"
+owner              = "modernops-showcase"
+file_permission    = "0644"
+
+# The value below is a placeholder, not a credential. Real secrets never belong
+# in a variable file that is committed.
+# sensitive_demo_value = "demo-only-placeholder-not-a-secret"

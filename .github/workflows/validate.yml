@@ -1,0 +1,162 @@
+name: validate
+
+# Repository validation: the checks a reviewer would otherwise do by hand.
+# All actions are free for public repositories; no secret is needed.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: python tests and evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --disable-pip-version-check -r requirements-dev.txt
+          python3 -m pip install --disable-pip-version-check ruff==0.8.4
+      - name: Ruff (lint)
+        run: ruff check agents scripts tests
+      - name: Python tests
+        run: python3 -m pytest tests -q
+      - name: Validate evidence and replay documents
+        run: python3 scripts/validate_evidence.py --strict
+
+  shell:
+    name: shell scripts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shellcheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: "."
+          ignore_paths: "website/.venv .venv"
+
+  yaml:
+    name: yaml and workflows
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install yamllint
+        run: python3 -m pip install --disable-pip-version-check yamllint==1.35.1
+      - name: yamllint
+        run: yamllint -c .yamllint.yml .
+      - name: actionlint
+        uses: docker://rhysd/actionlint:1.7.7
+        with:
+          args: -color
+
+  terraform:
+    name: terraform fmt and validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        lab:
+          - labs/01-terraform-lifecycle
+          - labs/03-kubernetes-platform/terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.17.2"
+          terraform_wrapper: false
+      - name: fmt (check)
+        run: terraform fmt -check -recursive
+        working-directory: ${{ matrix.lab }}
+      - name: init (no backend)
+        run: terraform init -backend=false -input=false -no-color
+        working-directory: ${{ matrix.lab }}
+      - name: validate
+        run: terraform validate -no-color
+        working-directory: ${{ matrix.lab }}
+
+  links:
+    name: markdown links
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lychee link check
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress --accept 200,206,429
+            --exclude-path website/.venv
+            --exclude-path .venv
+            --exclude "modern-ops-showcase\\.tatics\\.de"
+            "**/*.md"
+          fail: true
+
+  website:
+    name: website build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install MkDocs Material
+        run: python3 -m pip install --disable-pip-version-check -r website/requirements.txt
+      - name: Build site (strict)
+        run: mkdocs build --strict --config-file website/mkdocs.yml --site-dir site
+        working-directory: .
+      - name: Where did the site go
+        run: ls -la website/site | head
+
+  security:
+    name: security scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy filesystem scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret,config
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+          format: table
+      - name: Trivy report
+        if: always()
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret,config
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          format: json
+          output: trivy-report.json
+      - name: Upload Trivy report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report
+          path: trivy-report.json
+          retention-days: 14
+          if-no-files-found: warn

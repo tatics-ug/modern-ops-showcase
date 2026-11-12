@@ -1,0 +1,77 @@
+name: demo-kubernetes
+
+# Lab 03 -- Kubernetes Application Platform in a temporary kind cluster.
+# Free: standard runners for public repositories, no registry, no cloud.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "labs/03-kubernetes-platform/**"
+      - ".github/workflows/demo-kubernetes.yml"
+  pull_request:
+    paths:
+      - "labs/03-kubernetes-platform/**"
+      - ".github/workflows/demo-kubernetes.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: demo-kubernetes-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  KIND_VERSION: v0.33.0
+  KIND_SHA256: aee6151561422756b764a4ae28e7f44cda5af5a9eead3cc9985112b1de8d8e0d
+
+jobs:
+  lifecycle:
+    name: kubernetes lifecycle
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: labs/03-kubernetes-platform
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: python3 -m pip install --disable-pip-version-check pytest==8.3.4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.17.2"
+          terraform_wrapper: false
+
+      - name: Install kind (checksum verified)
+        working-directory: .
+        run: |
+          curl -fsSL -o kind "https://github.com/kubernetes-sigs/kind/releases/download/${KIND_VERSION}/kind-linux-amd64"
+          echo "${KIND_SHA256}  kind" | sha256sum -c -
+          chmod +x kind
+          sudo mv kind /usr/local/bin/kind
+          kind version
+
+      - name: Run full lifecycle
+        run: bash tests/run_lab.sh
+
+      - name: Ensure cleanup
+        if: always()
+        run: |
+          terraform -chdir=terraform destroy -input=false -auto-approve -no-color || true
+          kind delete cluster --name modernops-lab03 || true
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab03-evidence
+          path: labs/03-kubernetes-platform/evidence/
+          retention-days: 14
+          if-no-files-found: warn

@@ -1,0 +1,163 @@
+name: agentic-issue
+
+# Scripted reference pipeline (NO LLM): triage -> plan -> implement (bounded)
+# -> tests -> independent rule-based review -> pull request -> human review.
+#
+# Safety: untrusted issue text is only read by Python scripts. It is never
+# interpolated into shell commands. The pipeline writes exclusively to
+# evidence/agent-runs/ and replay/recordings/, never merges, and needs no
+# secret other than the automatic GITHUB_TOKEN.
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Issue number to process"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: agentic-issue-${{ github.event.issue.number || inputs.issue_number }}
+  cancel-in-progress: false
+
+jobs:
+  pipeline:
+    name: scripted issue-to-PR pipeline
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'agent:task')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ISSUE_NUMBER: ${{ github.event.issue.number || inputs.issue_number }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: python3 -m pip install --disable-pip-version-check pytest==8.3.4
+
+      - name: Configure git identity
+        run: |
+          git config user.name "modernops-agent[bot]"
+          git config user.email "modernops-agent@users.noreply.github.com"
+
+      - name: Read issue (untrusted input, never executed)
+        run: |
+          gh issue view "$ISSUE_NUMBER" --json number,title,body,url,labels > "$RUNNER_TEMP/issue.json"
+
+      - name: Run pipeline
+        id: pipeline
+        continue-on-error: true
+        env:
+          ISSUE_JSON: ${{ runner.temp }}/issue.json
+          RUN_DIR: ${{ runner.temp }}/agent-run
+        run: bash scripts/run_agent_pipeline.sh
+
+      - name: Read triage decision
+        id: triage
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          path = pathlib.Path(os.environ["RUNNER_TEMP"]) / "agent-run" / "triage.json"
+          accepted = False
+          reason = "no triage result"
+          if path.exists():
+              data = json.loads(path.read_text())
+              accepted = bool(data.get("accepted"))
+              reason = data.get("reason", reason)
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write(f"accepted={'true' if accepted else 'false'}\n")
+              out.write("reason=" + reason.replace("\n", " ")[:200] + "\n")
+          PY
+
+      - name: Comment rejection
+        if: steps.triage.outputs.accepted != 'true'
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --body \
+            "The scripted agent pipeline did not accept this issue: **${{ steps.triage.outputs.reason }}**"
+
+      - name: Create branch, commit and open pull request
+        id: pr
+        if: steps.triage.outputs.accepted == 'true' && steps.pipeline.outcome == 'success'
+        run: |
+          BRANCH="agent/issue-${ISSUE_NUMBER}-${GITHUB_RUN_ID}"
+          git checkout -b "$BRANCH"
+          git add evidence/agent-runs replay/recordings
+          git commit -m "docs(agent): record task from issue #${ISSUE_NUMBER}" \
+            -m "Produced by the scripted reference pipeline (no LLM)."
+          git push --set-upstream origin "$BRANCH"
+
+          cat > "$RUNNER_TEMP/pr-body.md" <<EOF
+          ## Scripted agent pipeline (no LLM)
+
+          This pull request was produced by \`scripts/run_agent_pipeline.sh\` for issue #${ISSUE_NUMBER}.
+
+          What the pipeline did:
+          1. triage: checked labels, structure, size and safety of the issue text
+          2. plan: derived a bounded plan (one whitelisted file, tests, review)
+          3. implement: wrote \`evidence/agent-runs/issue-${ISSUE_NUMBER}.md\`
+          4. test: ran the repository test suite
+          5. review: independent rule-based checks (scope, secrets, tests, labels)
+          6. record: wrote the run record and the replay recording
+
+          **No model was called.** This is a deterministic reference implementation of the
+          orchestration shape. Merging requires human review (branch protection).
+
+          Workflow run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
+          EOF
+
+          PR_URL=$(gh pr create --base main --head "$BRANCH" \
+            --title "Agent task #${ISSUE_NUMBER}: bounded artefact from scripted pipeline" \
+            --body-file "$RUNNER_TEMP/pr-body.md")
+          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Attach pull request metadata to the recording
+        if: steps.triage.outputs.accepted == 'true' && steps.pipeline.outcome == 'success'
+        env:
+          PR_URL: ${{ steps.pr.outputs.pr_url }}
+          BRANCH: ${{ steps.pr.outputs.branch }}
+        run: |
+          PR_NUMBER=$(gh pr view "$PR_URL" --json number --jq .number)
+          python3 agents/recording.py --run "$RUNNER_TEMP/agent-run" --repo . \
+            --pr-number "$PR_NUMBER" --pr-url "$PR_URL"
+          git add evidence/agent-runs replay/recordings
+          git commit -m "docs(agent): attach pull request #${PR_NUMBER} to the recording"
+          git push
+
+      - name: Comment pipeline result
+        if: steps.triage.outputs.accepted == 'true'
+        run: |
+          if [[ -n "${{ steps.pr.outputs.pr_url }}" ]]; then
+            gh issue comment "$ISSUE_NUMBER" --body \
+              "Scripted pipeline finished (no LLM). Pull request for human review: ${{ steps.pr.outputs.pr_url }}"
+          else
+            gh issue comment "$ISSUE_NUMBER" --body \
+              "Scripted pipeline stopped without a pull request. See the workflow run for details."
+          fi
+
+      - name: Upload run artefacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentic-run-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/agent-run/
+            evidence/agent-runs/
+            replay/recordings/
+          retention-days: 30
+          if-no-files-found: warn
