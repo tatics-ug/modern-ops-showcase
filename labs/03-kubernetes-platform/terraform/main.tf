@@ -33,6 +33,10 @@ resource "kubernetes_config_map_v1" "app" {
 }
 
 resource "kubernetes_deployment_v1" "app" {
+  # The tests wait for the rollout explicitly. Without this the fault scenario
+  # would block the apply for five minutes and fail before it can be diagnosed.
+  wait_for_rollout = false
+
   metadata {
     name      = var.app_name
     namespace = kubernetes_namespace_v1.demo.metadata[0].name
