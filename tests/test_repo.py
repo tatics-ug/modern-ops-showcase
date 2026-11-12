@@ -262,3 +262,17 @@ def test_german_documents_name_the_english_source() -> None:
         if GERMAN_NOTICE not in (REPO_ROOT / german_counterpart(path)).read_text(encoding="utf-8")
     ]
     assert not missing, f"German files without the source notice: {missing}"
+
+
+def test_german_issue_form_keeps_the_pipeline_contract() -> None:
+    form = load_yaml(REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "agent-task.de.yml")
+    assert form["labels"] == ["agent:task"]
+    headings = [
+        str(field["attributes"].get("label", "")).lower()
+        for field in form["body"]
+        if field["type"] == "textarea"
+    ]
+    for required in ("goal", "scope", "acceptance"):
+        assert any(required in heading for heading in headings), (
+            f"the German issue form lost the '{required}' section the triage parser requires"
+        )

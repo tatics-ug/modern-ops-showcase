@@ -1,0 +1,53 @@
+name: Agenten-Aufgabe (geskriptete Pipeline)
+description: Begrenzte Aufgabe für die geskriptete Agenten-Pipeline. Das Label agent:task wird automatisch gesetzt.
+title: "agent: <kurze, konkrete Aufgabe>"
+labels: ["agent:task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Dieses Formular speist die **geskriptete Referenz-Pipeline** (kein LLM).
+        Die Pipeline schreibt genau eine Markdown-Datei unter
+        `evidence/agent-runs/` und öffnet einen Pull Request, der ein
+        menschliches Review benötigt.
+
+        Die Aufgabe begrenzt halten: ein Artefakt, keine
+        Infrastrukturänderungen.
+
+        Die Abschnittsüberschriften bleiben zweisprachig, weil die Pipeline die
+        englischen Schlüsselwörter `Goal`, `Scope` und `Acceptance` prüft.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal / Ziel
+      description: Was soll danach existieren? Ein oder zwei Sätze.
+      placeholder: Das Retry-Verhalten der Demo-Anwendung dokumentieren.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope / Umfang
+      description: Was ist ausdrücklich im Umfang, und was ist außerhalb?
+      placeholder: |
+        Im Umfang: evidence/agent-runs/issue-<number>.md
+        Außerhalb: Codeänderungen, Workflows, .github-Pfade
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria / Abnahmekriterien
+      description: Wie kann ein Reviewer prüfen, dass die Aufgabe erledigt ist?
+      placeholder: |
+        - Die Datei existiert und nennt die geskriptete Pipeline
+        - Die Testsuite des Repositories besteht
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Zusätzlicher Kontext (optional)
+      description: Links, Hintergrund, Einschränkungen. Keine Credentials und keine Secrets.
+    validations:
+      required: false
