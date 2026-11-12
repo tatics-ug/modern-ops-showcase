@@ -1,5 +1,7 @@
 # ADR 0009 -- MkDocs Material for the website
 
+**English** | [Deutsch](0009-static-site-framework.de.md)
+
 - Status: accepted
 - Date: 2026-11-12
 - Deciders: repository owner

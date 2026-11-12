@@ -1,5 +1,7 @@
 # ADR 0002 -- GitHub Pages for the public website
 
+**English** | [Deutsch](0002-github-pages-static-hosting.de.md)
+
 - Status: accepted
 - Date: 2026-11-12
 - Deciders: repository owner

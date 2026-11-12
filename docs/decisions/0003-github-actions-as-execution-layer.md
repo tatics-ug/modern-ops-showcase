@@ -1,5 +1,7 @@
 # ADR 0003 -- GitHub Actions as the execution layer
 
+**English** | [Deutsch](0003-github-actions-as-execution-layer.de.md)
+
 - Status: accepted
 - Date: 2026-11-12
 - Deciders: repository owner

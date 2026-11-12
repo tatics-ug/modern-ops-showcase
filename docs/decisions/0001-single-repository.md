@@ -1,5 +1,7 @@
 # ADR 0001 -- One repository at the start
 
+**English** | [Deutsch](0001-single-repository.de.md)
+
 - Status: accepted
 - Date: 2026-11-12
 - Deciders: repository owner

@@ -1,5 +1,7 @@
 # ADR 0005 -- Separate cluster creation from Terraform resource management
 
+**English** | [Deutsch](0005-cluster-creation-separate-from-terraform.de.md)
+
 - Status: accepted
 - Date: 2026-11-12
 - Deciders: repository owner

@@ -1,5 +1,7 @@
 # ADR 0011 -- Prometheus + Grafana as the observability stack
 
+**English** | [Deutsch](0011-observability-stack.de.md)
+
 - Status: proposed (planned for Lab 05)
 - Date: 2026-11-12
 - Deciders: repository owner
