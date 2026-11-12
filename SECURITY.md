@@ -1,5 +1,7 @@
 # Security Policy
 
+**English** | [Deutsch](SECURITY.de.md)
+
 ## Reporting a vulnerability
 
 Please do not open a public issue for security problems. Use GitHub's

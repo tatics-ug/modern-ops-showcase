@@ -1,5 +1,7 @@
 # Architecture
 
+**English** | [Deutsch](ARCHITECTURE.de.md)
+
 ModernOps Showcase is a **reference platform**, not a product: a repository of
 small, reproducible engineering scenarios plus the automation around them. This
 document explains how the pieces fit together, what runs where, and which parts
