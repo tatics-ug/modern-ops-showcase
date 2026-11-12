@@ -55,8 +55,8 @@ make website-serve             # http://127.0.0.1:8000
 - `command not found: mkdocs` -> `make website` verwenden, das
   `website/.venv` bevorzugt.
 
-Vollständiges Runbook:
-[`docs/RUNBOOK.de.md`](https://github.com/tatics-ug/modern-ops-showcase/blob/main/docs/RUNBOOK.de.md).
+Vollständiges Runbook: `docs/RUNBOOK.de.md` im Repository
+([docs/](https://github.com/tatics-ug/modern-ops-showcase/tree/main/docs)).
 
 ---
 
