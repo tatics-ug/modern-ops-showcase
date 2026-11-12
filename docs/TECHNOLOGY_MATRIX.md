@@ -10,7 +10,7 @@ successfully, evidence available).
 | Technology | Status | Where | Evidence |
 | --- | --- | --- | --- |
 | Git / GitHub | `validated` | repository, issues, PRs | commit history, PRs |
-| GitHub Actions | `implemented` | `.github/workflows/` | workflow runs |
+| GitHub Actions | `validated` | `.github/workflows/` | workflow runs (validate, demos, pages) |
 | YAML | `validated` | workflows, kind config | yamllint in CI |
 | Bash | `validated` | `labs/*/tests/*.sh` | shellcheck in CI |
 | Python | `validated` | tests, scripts, demo app | pytest in CI |
@@ -19,8 +19,8 @@ successfully, evidence available).
 | Docker | `validated` | Lab 03 image build, kind | lab run |
 | Terraform | `validated` | Lab 01, Lab 03 | lifecycle runs + evidence |
 | OpenTofu | `validated` | `make TF=tofu lifecycle` | local run (lock-file caveat documented) |
-| Kubernetes | `implemented` | Lab 03 | lab lifecycle in CI |
-| kind | `implemented` | Lab 03 cluster | lab lifecycle in CI |
+| Kubernetes | `validated` | Lab 03 | `demo-kubernetes` run in CI |
+| kind | `validated` | Lab 03 cluster | `demo-kubernetes` run in CI |
 | CI/CD | `implemented` | validate/demo/pages workflows | workflow runs |
 | AWS fundamentals | `planned` | not implemented, no AWS resources created | -- |
 
@@ -94,14 +94,14 @@ yet. Nothing in this repository shows a dashboard that does not exist.
 | vLLM | `planned` | later |
 | Qdrant | `planned` | RAG example later |
 | OpenAI-compatible APIs | `planned` | BYOK only, never operator keys |
-| Agentic workflows | `implemented` | scripted pipeline, **no LLM** (see ADR 0008) |
+| Agentic workflows | `validated` | scripted pipeline, **no LLM** (see ADR 0008) |
 
 ## Agentic engineering
 
 | Capability | Status | Notes |
 | --- | --- | --- |
-| Issue-driven pipeline | `implemented` | triage -> plan -> implement -> test -> review -> PR |
+| Issue-driven pipeline | `validated` | triage -> plan -> implement -> test -> review -> PR (run 43255005540) |
 | Untrusted-input handling | `implemented` | issue text is parsed, never executed |
 | Human approval gate | `implemented` | branch protection + no auto-merge |
-| Replay of a real run | `implemented` | schema + recording after the first real pipeline run |
+| Replay of a real run | `implemented` | recording of run 43255005540 lives on the pipeline PR #2 until a human merges it |
 | Live AI mode (BYOK) | `planned` | documented design only, disabled |

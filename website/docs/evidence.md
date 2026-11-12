@@ -33,6 +33,16 @@ known limitations.
 }
 ```
 
+## Executed workflows
+
+| Workflow | Result |
+| --- | --- |
+| `validate` (python, shell, yaml, actionlint, terraform, links, site, trivy) | passing |
+| `demo-terraform-lifecycle` | passing |
+| `demo-kubernetes` (kind cluster, apply, tests, fault, repair, cleanup) | passing ([run](https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43256482922)) |
+| `deploy-pages` | passing |
+| `agentic-issue` (scripted, no LLM) | passing ([run](https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43255005540)) |
+
 ## Validation
 
 ```bash

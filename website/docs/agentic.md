@@ -36,6 +36,16 @@ flowchart LR
 | runtime | workflow timeout, bounded plan limits |
 | honesty | artefacts carry `kind: scripted-pipeline`, `llm: false` |
 
+## First real run
+
+The pipeline ran for issue #1 and opened [pull request #2](https://github.com/tatics-ug/modern-ops-showcase/pull/2) with three
+generated files (artefact, run record, replay recording). All roles passed:
+triage accepted, plan derived, implementer wrote one file, tests green, review
+approved. The pull request is open and waits for human review -- the pipeline
+never merges.
+
+Workflow run: [43255005540](https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43255005540).
+
 ## Replay
 
 Recordings of real runs live in `replay/recordings/` and follow

@@ -8,8 +8,9 @@ everything again.
 Cluster tooling: **Docker + kind**. Provisioning: **Terraform `hashicorp/kubernetes`
 provider**. No cloud account, no managed Kubernetes, no cost.
 
-Status: **validated locally** -- full lifecycle is automated in
-`tests/run_lab.sh`; the same script runs in the `demo-kubernetes` workflow.
+Status: **validated** -- the `demo-kubernetes` workflow executed the full
+lifecycle successfully (cluster up, apply, tests, fault detection, repair,
+destroy, cluster delete): https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43256482922
 
 ---
 

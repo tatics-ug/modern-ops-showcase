@@ -57,6 +57,20 @@ permissions or cost-relevant resources always requires human approval
 - Scanning: Trivy runs in the validation workflow (filesystem/config scan);
   results are uploaded as workflow artifacts.
 
+## Repository settings that enforce this model
+
+| Setting | Value | Why |
+| --- | --- | --- |
+| Branch protection on `main` | PR required, 1 approving review, no force-push, no deletion | human gate for every change |
+| Actions may create pull requests | enabled at organisation level | the scripted pipeline opens PRs, but cannot merge or approve them |
+| Default workflow token | read-only | workflows must request write access explicitly |
+| Pages source | GitHub Actions | static site only, no backend |
+| Artifact retention | 14 days (demos), 30 days (agent runs) | avoid stale, growing storage |
+
+The owner's `gh` token needs the `workflow` and `admin:org` scopes for
+repository administration; it is never stored in this repository and never used
+inside a workflow.
+
 ## Supported versions
 
 Only the latest commit on `main` is supported. There are no released versions

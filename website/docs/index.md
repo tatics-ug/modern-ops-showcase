@@ -13,7 +13,7 @@ one transparent reference project.
 | Lab | What it demonstrates | Status |
 | --- | --- | --- |
 | Lab 01 | Terraform lifecycle: modules, validation, plan/apply, state, destroy, drift | `validated` (local) |
-| Lab 03 | Kubernetes platform on kind: deployment, probes, limits, fault case | `implemented` |
+| Lab 03 | Kubernetes platform on kind: deployment, probes, limits, fault case | `validated` (CI) |
 
 Everything else in this project (Ansible, GitOps, observability, DevSecOps,
 AWS emulation, AI infrastructure) is **planned** and labelled as such. No

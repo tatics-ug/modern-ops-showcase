@@ -20,11 +20,11 @@ does not exist.
 | Area | Contents | Status |
 | --- | --- | --- |
 | Lab 01 | Terraform infrastructure lifecycle (modules, state, idempotency, destroy) | `validated` (local) |
-| Lab 03 | Kubernetes application platform (kind, Terraform, probes, fault case) | `implemented` |
+| Lab 03 | Kubernetes application platform (kind, Terraform, probes, fault case) | `validated` (CI) |
 | Lab 02, 04--09 | Ansible, Argo CD, observability, DevSecOps, AWS emulation, agentic lab, AI infrastructure | `planned` |
 | CI/CD | Validation workflow, pages deployment, demo workflows | `implemented` |
 | Website | MkDocs Material site published via GitHub Pages | `implemented` |
-| Agentic engineering | Scripted reference pipeline (no LLM) + replay schema + BYOK design | `implemented` (replay: `validated` after first real run) |
+| Agentic engineering | Scripted reference pipeline (no LLM) + replay schema + BYOK design | `validated` (first real run: PR #2, pending human merge) |
 
 Status vocabulary: `planned` -- described only, `experimental` -- exists but is
 not reproducible yet, `implemented` -- code and tests exist, `validated` --
@@ -100,6 +100,16 @@ the orchestration shape and is labelled as such everywhere. A full replay of a
 real run is stored under [replay/](replay/README.md). Live AI runs are a
 separate, optional BYOK mode that is **not** enabled in this repository; no
 operator key is ever exposed.
+
+## Evidence
+
+| Source | Link |
+| --- | --- |
+| Validation workflow | https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43256482921 |
+| Lab 01 lifecycle in CI | https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43254091400 |
+| Lab 03 lifecycle in CI | https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43256482922 |
+| Website deployment | https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43256483294 |
+| First real agentic pipeline run | https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43255005540 (pull request #2) |
 
 ## License
 

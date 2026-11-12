@@ -1,5 +1,7 @@
 # Lab 03 -- Kubernetes Application Platform
 
+Status: `validated` -- full lifecycle executed in the `demo-kubernetes` workflow ([run](https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43256482922)).
+
 Runs a small real application in a real (temporary) Kubernetes cluster,
 provisions it with Terraform, proves it is healthy, breaks it on purpose,
 detects the failure, repairs it and cleans everything up.

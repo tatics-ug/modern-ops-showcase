@@ -43,6 +43,13 @@ python3 scripts/validate_evidence.py
 
 ## Current state
 
-`recordings/` is filled after the first real `agentic-issue` workflow run. Until
-then, replay is described but not demonstrated -- and the technology matrix says
-so.
+The first real recording was produced by the `agentic-issue` run
+[43255005540](https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43255005540):
+`replay/recordings/agent-issue-1-43255005540.json`. It contains six ordered
+events (triage, plan, implement, tests, review, recording), the plan, the test
+result, the review checks and the pull request metadata (PR #2).
+
+That file currently lives on the pipeline branch `agent/issue-1-43255005540` and
+is part of [pull request #2](https://github.com/tatics-ug/modern-ops-showcase/pull/2).
+It becomes part of `main` when a human merges the pull request -- the pipeline
+never merges, which is the point of the human gate.

@@ -90,7 +90,22 @@ by another repository, or HTTPS is enabled before the certificate exists.
 - Evidence artifacts are retained for 14 days (demo workflows) to keep storage
   small.
 
-## 8. Escalation
+## 8. Repository settings applied for this project (free tiers)
+
+| Setting | Value |
+| --- | --- |
+| Visibility | public |
+| Pages | GitHub Actions source, HTTPS enforced |
+| Org policy | "Actions may create pull requests" enabled (merge still human-only) |
+| Default workflow permissions | read-only |
+| Labels | `agent:task`, `docs` |
+| Branch protection | see SECURITY.md |
+
+The policy "Actions may create pull requests" is an organisation-level setting
+that needs the `admin:org` scope. It is required because the scripted pipeline
+opens the PR with `GITHUB_TOKEN`; the token still cannot merge or approve.
+
+## 9. Escalation
 
 Only the repository owner can change security policies, branch protection,
 secrets or cost-relevant settings. Anything that would create paid resources

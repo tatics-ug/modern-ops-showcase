@@ -84,7 +84,22 @@ python3 agents/reviewer/reviewer.py --run /tmp/run --repo .
 The workflow does the same via `scripts/run_agent_pipeline.sh`, which also
 creates the branch, commits and PR (only when running inside GitHub Actions).
 
-## 7. What is not implemented
+## 7. First real run
+
+- Workflow run: https://github.com/tatics-ug/modern-ops-showcase/actions/runs/43255005540
+- Pull request: <https://github.com/tatics-ug/modern-ops-showcase/pull/2>
+- Recording: `replay/recordings/agent-issue-1-43255005540.json` (on the PR branch)
+- Issue: #1
+
+The run completed triage, plan, implementation, tests (all green), review
+(approved) and pull-request creation. The pull request is open and awaits human
+review; the pipeline never merges.
+
+Known CI limitation: pull requests created with the workflow `GITHUB_TOKEN` start
+their checks in `action_required` state, so a maintainer has to approve those
+runs manually.
+
+## 8. What is not implemented
 
 - No model calls, no prompts, no token accounting.
 - No multi-issue queue, no retry loops beyond one corrective pass.
