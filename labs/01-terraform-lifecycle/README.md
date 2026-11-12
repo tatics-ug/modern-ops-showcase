@@ -1,5 +1,7 @@
 # Lab 01 -- Terraform Infrastructure Lifecycle
 
+**English** | [Deutsch](README.de.md)
+
 Hands-on lab that demonstrates the full Infrastructure-as-Code lifecycle with
 Terraform in a controlled environment: **format, validate, plan, apply, verify,
 detect drift, destroy, cleanup**. It uses the `hashicorp/local` provider, so it
