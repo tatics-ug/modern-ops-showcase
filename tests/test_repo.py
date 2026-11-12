@@ -27,6 +27,28 @@ REQUIRED_DOCUMENTS = [
     "docs/AGENT_WORKFLOW.md",
 ]
 
+TRANSLATED_WEBSITE_PAGES = [
+    f"website/docs/{name}"
+    for name in (
+        "index.md",
+        "architecture.md",
+        "agentic.md",
+        "technology.md",
+        "evidence.md",
+        "getting-started.md",
+        "about.md",
+        "labs/index.md",
+        "labs/terraform-lifecycle.md",
+        "labs/kubernetes-platform.md",
+    )
+]
+
+# Every German file states that the English original is authoritative.
+GERMAN_NOTICE = (
+    "*Deutsche Fassung; maßgeblich ist die englische Originalfassung. "
+    "Die Übersetzung kann hinter der englischen Version zurückliegen.*"
+)
+
 EXPECTED_ADRS = [
     "0001-single-repository.md",
     "0002-github-pages-static-hosting.md",
@@ -41,6 +63,21 @@ EXPECTED_ADRS = [
     "0011-observability-stack.md",
     "0012-kubernetes-policy-technology.md",
 ]
+
+TRANSLATED_DOCUMENTS = [
+    "README.md",
+    "ARCHITECTURE.md",
+    "SECURITY.md",
+    "AGENTS.md",
+    "docs/GETTING_STARTED.md",
+    "docs/RUNBOOK.md",
+    "docs/TECHNOLOGY_MATRIX.md",
+    "docs/AGENT_WORKFLOW.md",
+    "labs/01-terraform-lifecycle/README.md",
+    "labs/03-kubernetes-platform/README.md",
+    "evidence/README.md",
+    "replay/README.md",
+] + [f"docs/decisions/{name}" for name in EXPECTED_ADRS]
 
 SECRET_PATTERNS = (
     re.compile(r"AKIA[0-9A-Z]{16}"),
@@ -185,3 +222,57 @@ def test_website_navigation_targets_exist() -> None:
         if isinstance(target, str) and target.endswith(".md") and not (docs_dir / target).is_file():
             missing.append(target)
     assert not missing, f"navigation entries without file: {missing}"
+
+
+def german_counterpart(path: str) -> str:
+    """German translation next to the English original (`README.md` -> `README.de.md`)."""
+    return f"{path[: -len('.md')]}.de.md"
+
+
+def read_head(path: str, lines: int = 6) -> str:
+    return "\n".join((REPO_ROOT / path).read_text(encoding="utf-8").splitlines()[:lines])
+
+
+def test_german_translations_exist() -> None:
+    missing = [
+        german_counterpart(path)
+        for path in TRANSLATED_DOCUMENTS + TRANSLATED_WEBSITE_PAGES
+        if not (REPO_ROOT / german_counterpart(path)).is_file()
+    ]
+    assert not missing, f"missing German translations: {missing}"
+
+
+def test_language_switchers_link_both_directions() -> None:
+    problems = []
+    for path in TRANSLATED_DOCUMENTS:
+        de_path = german_counterpart(path)
+        en_name = path.rsplit("/", 1)[-1]
+        de_name = de_path.rsplit("/", 1)[-1]
+        if f"**English** | [Deutsch]({de_name})" not in read_head(path):
+            problems.append(f"{path}: language switcher missing in the document head")
+        if f"**Deutsch** | [English]({en_name})" not in read_head(de_path):
+            problems.append(f"{de_path}: mirrored language switcher missing in the document head")
+    assert not problems, "\n".join(problems)
+
+
+def test_german_documents_name_the_english_source() -> None:
+    missing = [
+        german_counterpart(path)
+        for path in TRANSLATED_DOCUMENTS + TRANSLATED_WEBSITE_PAGES
+        if GERMAN_NOTICE not in (REPO_ROOT / german_counterpart(path)).read_text(encoding="utf-8")
+    ]
+    assert not missing, f"German files without the source notice: {missing}"
+
+
+def test_german_issue_form_keeps_the_pipeline_contract() -> None:
+    form = load_yaml(REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "agent-task.de.yml")
+    assert form["labels"] == ["agent:task"]
+    headings = [
+        str(field["attributes"].get("label", "")).lower()
+        for field in form["body"]
+        if field["type"] == "textarea"
+    ]
+    for required in ("goal", "scope", "acceptance"):
+        assert any(required in heading for heading in headings), (
+            f"the German issue form lost the '{required}' section the triage parser requires"
+        )

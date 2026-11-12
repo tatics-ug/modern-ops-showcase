@@ -1,5 +1,7 @@
 # Lab 03 -- Kubernetes Application Platform
 
+**English** | [Deutsch](README.de.md)
+
 Runs a small, real application in a real (temporary) Kubernetes cluster, provisions
 the workload declaratively with Terraform, proves it is healthy with automated
 tests, breaks it on purpose, detects the failure, repairs it, and removes

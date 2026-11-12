@@ -1,5 +1,7 @@
 # ADR 0004 -- Temporary kind clusters for Kubernetes
 
+**English** | [Deutsch](0004-temporary-kind-clusters.de.md)
+
 - Status: accepted
 - Date: 2026-11-12
 - Deciders: repository owner

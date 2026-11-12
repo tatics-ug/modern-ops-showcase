@@ -1,5 +1,7 @@
 # Agent Workflow (scripted reference pipeline)
 
+**English** | [Deutsch](AGENT_WORKFLOW.de.md)
+
 This document describes the issue-to-PR pipeline in `.github/workflows/agentic-issue.yml`
 and the roles it implements.
 

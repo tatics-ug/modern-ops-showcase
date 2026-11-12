@@ -1,5 +1,7 @@
 # ADR 0010 -- AWS emulation (decision deferred)
 
+**English** | [Deutsch](0010-aws-emulator.de.md)
+
 - Status: proposed (no emulator selected, nothing implemented)
 - Date: 2026-11-12
 - Deciders: repository owner

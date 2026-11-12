@@ -1,5 +1,7 @@
 # ModernOps Showcase
 
+**English** | [Deutsch](README.de.md)
+
 **Modern Infrastructure & Agentic Engineering** -- a reproducible, hands-on
 showcase for modern infrastructure and agentic engineering. Explore Linux
 automation, Terraform, Kubernetes, GitOps, CI/CD, observability, security and

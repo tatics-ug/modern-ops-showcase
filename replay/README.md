@@ -1,5 +1,7 @@
 # Replay
 
+**English** | [Deutsch](README.de.md)
+
 Replay makes a run followable without executing it again -- and without an API
 key. It is a recording of a **real** run, never a simulation.
 

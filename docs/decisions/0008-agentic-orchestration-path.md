@@ -1,5 +1,7 @@
 # ADR 0008 -- Scripted agent orchestration for the MVP
 
+**English** | [Deutsch](0008-agentic-orchestration-path.de.md)
+
 - Status: accepted
 - Date: 2026-11-12
 - Deciders: repository owner

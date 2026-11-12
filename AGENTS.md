@@ -1,5 +1,7 @@
 # AGENTS.md -- Rules for contributors and AI agents
 
+**English** | [Deutsch](AGENTS.de.md)
+
 This file applies to every change in `tatics-ug/modern-ops-showcase`, human or
 automated. If a rule here conflicts with a task instruction, stop and ask.
 
@@ -48,6 +50,9 @@ cd labs/03-kubernetes-platform && make lifecycle
 ## 4. Conventions
 
 - Documentation, comments, commit messages, PR text and code: **English**.
+  English is the canonical language; every documentation file also exists as a
+  German translation (`*.de.md`) that is maintained with the same structure and
+  linked in both directions.
 - Status vocabulary exactly: `planned`, `experimental`, `implemented`, `validated`.
 - Formatting: `terraform fmt` (Terraform), `python3 -m compileall` and `pytest`,
   `bash -n` for shell scripts, `yamllint` for YAML.
@@ -61,7 +66,8 @@ cd labs/03-kubernetes-platform && make lifecycle
 - Every behaviour you add needs at least one automated test or a documented
   reason why testing is impossible (and then it must be marked `planned`).
 - Every lab gets a README with: purpose, prerequisites, architecture, run
-  instructions, expected result, tests, failure case, cleanup, limitations.
+  instructions, expected result, tests, failure case, cleanup, limitations (plus
+  the German `README.de.md` counterpart).
 - Documentation and website status tables must match reality. A lab may only be
   `validated` if a real run produced evidence.
 - Never invent test results, benchmarks, customers, agent runs or cloud resources.

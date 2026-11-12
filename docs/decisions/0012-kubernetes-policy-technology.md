@@ -1,5 +1,7 @@
 # ADR 0012 -- Kubernetes policy engine (decision deferred)
 
+**English** | [Deutsch](0012-kubernetes-policy-technology.de.md)
+
 - Status: proposed (planned for Lab 06)
 - Date: 2026-11-12
 - Deciders: repository owner

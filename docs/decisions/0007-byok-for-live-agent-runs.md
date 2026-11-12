@@ -1,5 +1,7 @@
 # ADR 0007 -- BYOK for live agent runs (not implemented)
 
+**English** | [Deutsch](0007-byok-for-live-agent-runs.de.md)
+
 - Status: proposed (design only, intentionally disabled)
 - Date: 2026-11-12
 - Deciders: repository owner
