@@ -1,5 +1,7 @@
 # Getting Started
 
+**English** | [Deutsch](GETTING_STARTED.de.md)
+
 This guide takes you from a fresh clone to a successful demo run in a few
 minutes. No cloud account, no API key, no GPU, no cost.
 

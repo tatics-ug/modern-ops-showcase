@@ -1,5 +1,7 @@
 # Technology Matrix
 
+**English** | [Deutsch](TECHNOLOGY_MATRIX.de.md)
+
 Every technology is listed with its **actual** maturity in this repository.
 Maturity values: `planned` (described only), `experimental` (exists, not
 reproducible), `implemented` (code and tests exist), `validated` (executed
