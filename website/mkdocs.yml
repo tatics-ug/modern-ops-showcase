@@ -44,6 +44,36 @@ theme:
 
 plugins:
   - search
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: de
+          name: Deutsch
+          build: true
+          site_description: >-
+            Ein reproduzierbares, praxisnahes Showcase für moderne Infrastruktur
+            und Agentic Engineering: Terraform, Kubernetes, CI/CD, Sicherheit,
+            Nachweise und eine geskriptete Issue-zu-PR-Pipeline.
+          copyright: MIT-Lizenz -- ModernOps Showcase contributors
+          nav_translations:
+            Home: Start
+            Labs: Labs
+            Overview: Überblick
+            Lab 01 -- Terraform lifecycle: Lab 01 -- Terraform-Lebenszyklus
+            Lab 03 -- Kubernetes platform: Lab 03 -- Kubernetes-Plattform
+            Architecture: Architektur
+            Agentic Engineering: Agentic Engineering
+            Technology Stack: Technologiestack
+            Evidence: Nachweise
+            Getting Started: Erste Schritte
+            About: Über das Projekt
 
 markdown_extensions:
   - admonition
